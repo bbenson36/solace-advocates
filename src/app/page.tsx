@@ -17,6 +17,7 @@ type Advocate = {
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     console.log("fetching advocates...");
@@ -29,24 +30,22 @@ export default function Home() {
   }, []);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value || "";
-
-    const el = document.getElementById("search-term");
-    if (el) el.innerHTML = searchTerm;
+    const value = e.target.value || "";
+    setSearchTerm(value);
 
     console.log("filtering advocates...");
     const filtered = advocates.filter((advocate) => {
       const specialtiesMatch = advocate.specialties
-        ? advocate.specialties.some((s) => s.toLowerCase().includes(searchTerm.toLowerCase()))
+        ? advocate.specialties.some((s) => s.toLowerCase().includes(value.toLowerCase()))
         : false;
 
       return (
-        advocate.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        advocate.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        advocate.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        advocate.degree.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        advocate.firstName.toLowerCase().includes(value.toLowerCase()) ||
+        advocate.lastName.toLowerCase().includes(value.toLowerCase()) ||
+        advocate.city.toLowerCase().includes(value.toLowerCase()) ||
+        advocate.degree.toLowerCase().includes(value.toLowerCase()) ||
         specialtiesMatch ||
-        String(advocate.yearsOfExperience).includes(searchTerm)
+        String(advocate.yearsOfExperience).includes(value)
       );
     });
 
@@ -56,6 +55,7 @@ export default function Home() {
   const onClick = () => {
     console.log(advocates);
     setFilteredAdvocates(advocates);
+    setSearchTerm("");
   };
 
   return (
@@ -66,15 +66,16 @@ export default function Home() {
         <div>
           <p className="font-semibold">Search</p>
           <p className="text-sm text-gray-600">
-            Searching for: <span id="search-term" className="font-medium"></span>
+          Searching for: <span id="search-term" className="font-medium">{searchTerm}</span>
           </p>
         </div>
         <div className="flex gap-2 items-center">
           <input
             className="border border-gray-300 rounded px-3 py-2 flex-1"
-            onChange={onChange}
-            aria-label="search"
-          />
+              onChange={onChange}
+              aria-label="search"
+              value={searchTerm}
+            />
           <Button variant="secondary" onClick={onClick}>
             Reset Search
           </Button>
