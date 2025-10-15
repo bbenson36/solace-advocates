@@ -55,14 +55,18 @@ describe('Home page', () => {
     const input = screen.getByLabelText('search')
     await userEvent.type(input, 'Jane')
 
-    // The "Searching for" span should reflect the typed value
-    const searchTerm = document.getElementById('search-term')
-    expect(searchTerm).toBeTruthy()
-    expect(searchTerm?.textContent?.toLowerCase()).toContain('jane')
+  // The "Searching for" span should reflect the typed value
+  const searchTerm = document.getElementById('search-term')
+  expect(searchTerm).toBeTruthy()
+  expect(searchTerm?.textContent?.toLowerCase()).toContain('jane')
 
-    // Now click Reset Search and expect John to be visible again
-    await userEvent.click(resetBtn)
-    expect(await screen.findByText('John')).toBeInTheDocument()
-    expect(await screen.findByText('Jane')).toBeInTheDocument()
+  // John should be filtered out when searching for Jane
+  expect(screen.queryByText('John')).not.toBeInTheDocument()
+
+  // Now click Reset Search and expect John to be visible again and Jane present
+  await userEvent.click(resetBtn)
+  expect(await screen.findByText('John')).toBeInTheDocument()
+  const janes = await screen.findAllByText('Jane')
+  expect(janes.length).toBeGreaterThanOrEqual(1)
   })
 })
