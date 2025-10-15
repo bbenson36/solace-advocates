@@ -1,6 +1,5 @@
-import type { Config } from 'tailwindcss'
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
@@ -33,24 +32,12 @@ const config: Config = {
           500: '#6366f1',
           600: '#4f46e5',
         },
-        success: {
-          500: '#16a34a',
-        },
-        danger: {
-          500: '#dc2626',
-        },
+        success: { 500: '#16a34a' },
+        danger: { 500: '#dc2626' },
       },
-      spacing: {
-        18: '4.5rem',
-        72: '18rem',
-        84: '21rem',
-      },
-      borderRadius: {
-        lg: '0.75rem',
-      },
-      fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
-      },
+      spacing: { 18: '4.5rem', 72: '18rem', 84: '21rem' },
+      borderRadius: { lg: '0.75rem' },
+      fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
@@ -59,5 +46,3 @@ const config: Config = {
   },
   plugins: [],
 }
-
-export default config
