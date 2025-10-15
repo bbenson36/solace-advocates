@@ -34,23 +34,25 @@ export default function Home() {
     const value = e.target.value || "";
     setSearchTerm(value);
 
+    const lowerValue = value.toLowerCase();
+
     console.log("filtering advocates...");
-    const filtered = advocates.filter((advocate) => {
+    const filteredAdvocates = advocates.filter((advocate) => {
       const specialtiesMatch = advocate.specialties
-        ? advocate.specialties.some((s) => s.toLowerCase().includes(value.toLowerCase()))
+        ? advocate.specialties.some((s) => s.toLowerCase().includes(lowerValue))
         : false;
 
       return (
-        advocate.firstName.toLowerCase().includes(value.toLowerCase()) ||
-        advocate.lastName.toLowerCase().includes(value.toLowerCase()) ||
-        advocate.city.toLowerCase().includes(value.toLowerCase()) ||
-        advocate.degree.toLowerCase().includes(value.toLowerCase()) ||
+        advocate.firstName.toLowerCase().includes(lowerValue) ||
+        advocate.lastName.toLowerCase().includes(lowerValue) ||
+        advocate.city.toLowerCase().includes(lowerValue) ||
+        advocate.degree.toLowerCase().includes(lowerValue) ||
         specialtiesMatch ||
         String(advocate.yearsOfExperience).includes(value)
       );
     });
 
-    setFilteredAdvocates(filtered);
+    setFilteredAdvocates(filteredAdvocates);
   };
 
   const onClick = () => {
@@ -60,30 +62,48 @@ export default function Home() {
   };
 
   return (
-    <main className="m-6">
-      <h1 className="text-2xl font-bold">Solace Advocates</h1>
-
-      <div className="mt-6 space-y-3">
-        <div>
-          <p className="font-semibold">Search</p>
-          <p className="text-sm text-gray-600">
-          Searching for: <span id="search-term" className="font-medium">{searchTerm}</span>
-          </p>
+    <main className="min-h-screen bg-slate-50 text-slate-800">
+      <header className="border-b border-slate-200 bg-white">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-md bg-primary-500" />
+            <h1 className="text-xl font-semibold">Solace Advocates</h1>
+          </div>
         </div>
-        <div className="flex gap-2 items-center">
-          <input
-            className="border border-gray-300 rounded px-3 py-2 flex-1"
-              onChange={onChange}
-              aria-label="search"
-              value={searchTerm}
-            />
-          <Button variant="secondary" onClick={onClick}>
-            Reset Search
-          </Button>
-        </div>
-      </div>
+      </header>
 
-      <AdvocateTable advocates={filteredAdvocates} />
+      <section className="max-w-6xl mx-auto px-6 py-10">
+        <div className="bg-white shadow-sm rounded-lg p-6">
+          <div className="md:flex md:items-center md:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">Find an Advocate</h2>
+              <p className="mt-1 text-slate-600">Search by name, city, degree or specialty.</p>
+            </div>
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2">
+              <div className="mb-4">
+                <div className="font-semibold">Search</div>
+                { searchTerm && (<div className="text-sm text-slate-500">Searching for: <span id="search-term" className="font-medium">{searchTerm || '—'}</span></div>)}
+              </div>
+              <div className="flex gap-2 items-center">
+                <input
+                  className="border border-slate-200 rounded-lg px-3 py-2 flex-1 focus:ring-2 focus:ring-primary-200"
+                  onChange={onChange}
+                  aria-label="search"
+                  value={searchTerm}
+                />
+                <Button variant="secondary" onClick={onClick}>Reset</Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <AdvocateTable advocates={filteredAdvocates} />
+          </div>
+        </div>
+      </section>
     </main>
-  );
+  )
 }

@@ -47,8 +47,8 @@ describe('Home page', () => {
     const john = await screen.findByText('John')
     expect(john).toBeInTheDocument()
 
-    // Reset button should be present
-    const resetBtn = screen.getByRole('button', { name: /reset search/i })
+  // Reset button should be present (label updated to 'Reset')
+  const resetBtn = screen.getByRole('button', { name: /reset/i })
     expect(resetBtn).toBeInTheDocument()
 
     // Search input should be present; type a query that filters out John
